@@ -80,7 +80,7 @@ async def on_message(message):
                                inline=True
                            )
 
-                     except Exception as e:
+                       except Exception as e:
                           print(f"VPN lookup error: {e}")
                           embed.add_field(
                               name="VPN Status",
