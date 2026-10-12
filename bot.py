@@ -48,48 +48,10 @@ async def on_message(message):
                     embed.add_field(name="ZIP Code: ", value=json_ip_data["zip"], inline=True)
                     embed.add_field(name="Coordinates: ", value=coords, inline=True)
                     embed.add_field(name="ISP: ", value=json_ip_data["isp"], inline=False)
-                    # VPN / Proxy Detection
-                    try:
-                    vpn_response = requests.get(
-                        f"https://proxycheck.io/v2/{ip}?vpn=1&asn=1",
-                        timeout=10
-                    )
-                    vpn_response.raise_for_status()
-                    vpn_data = vpn_response.json()
-                
-                    result = vpn_data.get(ip, {})
-                    proxy = result.get("proxy", "unknown")
-                    connection_type = result.get("type", "Unknown")
-                
-                    if proxy == "yes":
-                        vpn_status = "⚠️ VPN / Proxy Detected"
-                    elif proxy == "no":
-                        vpn_status = "✅ No VPN / Proxy Detected"
-                    else:
-                        vpn_status = "❓ Unable to Determine"
-                
-                    embed.add_field(
-                        name="🛡️ VPN Status",
-                        value=vpn_status,
-                        inline=False
-                    )
-                
-                    embed.add_field(
-                        name="Connection Type",
-                        value=connection_type,
-                        inline=True
-                    )
-                
-                except Exception as e:
-                    print(f"VPN lookup error: {e}")
-                    embed.add_field(
-                        name="VPN Status",
-                        value="Lookup unavailable",
-                        inline=False
-                    )
-                  embed.add_field(name="ASN", value=json_ip_data.get("as", "Unknown"), inline=False)
-                  embed.add_field(name="Organization", value=json_ip_data.get("org", "Unknown"), inline=False)
-                  embed.add_field(name="Time Zone", value=json_ip_data.get("timezone", "Unknown"), inline=True)
+        
+                    embed.add_field(name="ASN", value=json_ip_data.get("as", "Unknown"), inline=False)
+                    embed.add_field(name="Organization", value=json_ip_data.get("org", "Unknown"), inline=False)
+                    embed.add_field(name="Time Zone", value=json_ip_data.get("timezone", "Unknown"), inline=True)
                   try:  # Get temperature
                       weather_api_response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&APPID={weather_api_key}&units=metric")
                       json_weather_data = json.loads(weather_api_response.text)
