@@ -52,17 +52,17 @@ async def on_message(message):
                     embed.add_field(name="ASN", value=json_ip_data.get("as", "Unknown"), inline=False)
                     embed.add_field(name="Organization", value=json_ip_data.get("org", "Unknown"), inline=False)
                     embed.add_field(name="Time Zone", value=json_ip_data.get("timezone", "Unknown"), inline=True)
-                  try:  # Get temperature
+                    try:  # Get temperature
                       weather_api_response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&APPID={weather_api_key}&units=metric")
                       json_weather_data = json.loads(weather_api_response.text)
                       temp = str(json_weather_data["main"]["temp"]) + "°C"
 
                       embed.add_field(name="Temp: ", value=temp, inline=False)
-                  except Exception:
-                      print("Error retrieving temperature")
+                    except Exception:
+                        print("Error retrieving temperature")
 
-                      embed.set_footer(text="Powered by ip-api.com and openweathermap.org")
-                      await message.channel.send(embed=embed) #Send embed
+                    embed.set_footer(text="Powered by ip-api.com and openweathermap.org")
+                    await message.channel.send(embed=embed) #Send embed
             except KeyError:
                 print("Partial IP result")
             except Exception:
