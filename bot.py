@@ -48,7 +48,9 @@ async def on_message(message):
                     embed.add_field(name="ZIP Code: ", value=json_ip_data["zip"], inline=True)
                     embed.add_field(name="Coordinates: ", value=coords, inline=True)
                     embed.add_field(name="ISP: ", value=json_ip_data["isp"], inline=False)
-
+                    embed.add_field(name="ASN", value=json_ip_data.get("as", "Unknown"), inline=False)
+                    embed.add_field(name="Organization", value=json_ip_data.get("org", "Unknown"), inline=False)
+                    embed.add_field(name="Time Zone", value=json_ip_data.get("timezone", "Unknown"), inline=True)
                     try: #Get temperature
                         weather_api_response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&APPID={weather_api_key}&units=metric")
                         json_weather_data = json.loads(weather_api_response.text)
