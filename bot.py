@@ -1,7 +1,6 @@
 import os
 import requests
 import discord
-import asyncio
 import json
 import re
 from dotenv import load_dotenv
@@ -24,12 +23,6 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if message.author.bot:
-        return
-
-    if message.author.id != OWNER_ID:
-        await message.channel.send(
-            "IP lookups require approval from the bot owner."
-        )
         return
     # Check if message contains an IP
     regex = re.compile(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})")
