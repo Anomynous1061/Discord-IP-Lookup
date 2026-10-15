@@ -48,6 +48,41 @@ async def on_message(message):
                     embed.add_field(name="ZIP Code: ", value=json_ip_data["zip"], inline=True)
                     embed.add_field(name="Coordinates: ", value=coords, inline=True)
                     embed.add_field(name="ISP: ", value=json_ip_data["isp"], inline=False)
+                    try:
+                    proxy_key = os.environ.get("PROXYCHECK_API_KEY", "")
+                
+                    params = {"vpn": 1, "asn": 1}
+                    if proxy_key:
+                        params["key"] = proxy_key
+                
+                    proxy_response = requests.get(
+                        f"https://proxycheck.io/v2/{ip}",
+                        params=params,
+                        timeout=8
+                    )
+                    proxy_response.raise_for_status()
+                    proxy_data = proxy_response.json()
+                
+                    ip_info = proxy_data.get(ip, {})
+                    if proxy_data.get("status") != "ok" or "proxy" not in ip_info:
+                        vpn_status = "UNKNOWN — lookup unavailable"
+                    elif ip_info.get("proxy") == "yes":
+                        vpn_status = " VPN / PROXY DETECTED"
+                    else:
+                        vpn_status = "No VPN or proxy detected"
+                
+                    embed.add_field(
+                        name=" VPN / Proxy Intelligence",
+                        value=vpn_status,
+                        inline=False
+                    )
+                
+                except (requests.RequestException, ValueError, KeyError):
+                    embed.add_field(
+                        name=" VPN / Proxy Intelligence",
+                        value="UNKNOWN — intelligence service unavailable",
+                        inline=False
+                    )
 
                     try: #Get temperature
                         weather_api_response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&APPID={weather_api_key}&units=metric")
