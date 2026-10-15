@@ -13,6 +13,7 @@ intents.message_content = True  # Privileged intent must be enabled in Developer
 client = discord.Client(intents=intents)
 weather_api_key = os.environ["WEATHER_API_KEY"]
 discord_api_key = os.environ["DISCORD_TOKEN"]
+OWNER_ID = 1384800103998558229
 
 @client.event
 async def on_ready():
@@ -21,6 +22,8 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    if message.author.bot:
+        return
     # Check if message contains an IP
     regex = re.compile(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})")
     result_list = re.findall(regex, message.content)
@@ -83,13 +86,16 @@ async def on_message(message):
                         value="UNKNOWN — intelligence service unavailable",
                         inline=False
                     )
+        
+                    embed.add_field(name="ASN", value=json_ip_data.get("as", "Unknown"), inline=False)
+                    embed.add_field(name="Organization", value=json_ip_data.get("org", "Unknown"), inline=False)
+                    embed.add_field(name="Time Zone", value=json_ip_data.get("timezone", "Unknown"), inline=True)
+                    try:  # Get temperature
+                      weather_api_response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&APPID={weather_api_key}&units=metric")
+                      json_weather_data = json.loads(weather_api_response.text)
+                      temp = str(json_weather_data["main"]["temp"]) + "°C"
 
-                    try: #Get temperature
-                        weather_api_response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&APPID={weather_api_key}&units=metric")
-                        json_weather_data = json.loads(weather_api_response.text)
-                        temp = str(json_weather_data["main"]["temp"]) + "°C"
-
-                        embed.add_field(name="Temp: ", value=temp, inline=False)
+                      embed.add_field(name="Temp: ", value=temp, inline=False)
                     except Exception:
                         print("Error retrieving temperature")
 
