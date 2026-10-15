@@ -77,12 +77,12 @@ async def on_message(message):
                         inline=False
                         )
                 
-                    except (requests.RequestException, ValueError, KeyError):
-                    embed.add_field(
-                        name=" VPN / Proxy Intelligence",
-                        value="UNKNOWN — intelligence service unavailable",
-                        inline=False
-                    )
+                   except Exception as e:
+                       embed.add_field(
+                           name="VPN / Proxy Intelligence",
+                           value=f"Lookup unavailable: {e}",
+                           inline=False
+                       )
 
                     try: #Get temperature
                         weather_api_response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&APPID={weather_api_key}&units=metric")
