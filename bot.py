@@ -77,7 +77,7 @@ async def on_message(message):
                         inline=False
                         )
                 
-                   except Exception as e:
+                    except Exception as e:
                        embed.add_field(
                            name="VPN / Proxy Intelligence",
                            value=f"Lookup unavailable: {e}",
