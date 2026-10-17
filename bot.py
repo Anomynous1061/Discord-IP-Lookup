@@ -1,5 +1,6 @@
 import os
 import requests
+from ipwhois import IPWhois
 import discord
 import json
 import re
@@ -103,6 +104,24 @@ async def on_message(message):
                         value=json_ip_data.get("org") or "Unknown",
                         inline=False
                     )
+                    try:
+                        rdap = IPWhois(ip).lookup_rdap(depth=0)
+                    
+                        network = rdap.get("network") or {}
+                        registered_name = network.get("name") or "Unknown"
+                    
+                        embed.add_field(
+                            name="Registered Network Name",
+                            value=str(registered_name),
+                            inline=False
+                        )
+                    
+                    except Exception:
+                        embed.add_field(
+                            name="Registered Network Name",
+                            value="Not publicly available",
+                            inline=False
+                        )
                     try: #Get temperature
                         weather_api_response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&APPID={weather_api_key}&units=metric")
                         json_weather_data = json.loads(weather_api_response.text)
