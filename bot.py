@@ -98,7 +98,11 @@ async def on_message(message):
                         value=json_ip_data.get("timezone", "Unknown"),
                         inline=False
                     )
-
+                    embed.add_field(
+                        name="Registered Network Owner",
+                        value=json_ip_data.get("org") or "Unknown",
+                        inline=False
+                    )
                     try: #Get temperature
                         weather_api_response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&APPID={weather_api_key}&units=metric")
                         json_weather_data = json.loads(weather_api_response.text)
