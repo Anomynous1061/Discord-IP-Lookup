@@ -83,6 +83,21 @@ async def on_message(message):
                            value=f"Lookup unavailable: {e}",
                            inline=False
                        )
+                    embed.add_field(
+                        name="ASN",
+                        value=json_ip_data.get("as", "Unknown"),
+                        inline=False
+                    )
+                    embed.add_field(
+                        name="Organization",
+                        value=json_ip_data.get("org", "Unknown"),
+                        inline=False
+                    )
+                    embed.add_field(
+                        name="Time Zone",
+                        value=json_ip_data.get("timezone", "Unknown"),
+                        inline=False
+                    )
 
                     try: #Get temperature
                         weather_api_response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&APPID={weather_api_key}&units=metric")
