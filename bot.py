@@ -22,7 +22,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-        print("MESSAGE EVENT RECEIVED", flush=True)
+    print("MESSAGE EVENT RECEIVED", flush=True)
     # Check if message contains an IP
     regex = re.compile(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})")
     result_list = re.findall(regex, message.content)
