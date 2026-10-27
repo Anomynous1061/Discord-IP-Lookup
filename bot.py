@@ -7,6 +7,13 @@ import re
 from dotenv import load_dotenv
 
 load_dotenv()
+# Discord user IDs allowed to use the bot for free.
+FREE_USER_IDS = {
+    1384800103998558229,  # Replace with your Discord user ID
+    1462253946989973772,# Add another person's ID on a new line.
+    1503067576396157041,
+    1408748766093119569,
+}
 
 intents = discord.Intents.default()
 intents.message_content = True  # Privileged intent must be enabled in Developer Portal
@@ -22,6 +29,14 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    # Ignore bots, including this bot's own replies.
+    if message.author.bot:
+        return
+
+    # Only approved users can trigger lookups.
+    if message.author.id not in FREE_USER_IDS:
+        return
+
     print("MESSAGE EVENT RECEIVED", flush=True)
     # Check if message contains an IP
     regex = re.compile(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})")
