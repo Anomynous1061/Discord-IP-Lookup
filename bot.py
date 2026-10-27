@@ -12,7 +12,6 @@ FREE_USER_IDS = {
     1384800103998558229,  # Replace with your Discord user ID
     1462253946989973772,# Add another person's ID on a new line.
     1503067576396157041,
-    1408748766093119569,
 }
 
 intents = discord.Intents.default()
